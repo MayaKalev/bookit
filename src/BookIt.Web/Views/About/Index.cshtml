@@ -1,0 +1,24 @@
+@* This line says which type of data this view receives. Now "Model" is an AboutViewModel. *@
+@model AboutViewModel
+
+@{
+    // A C# code block. ViewData["Title"] is read by _Layout.cshtml for the browser tab title.
+    ViewData["Title"] = "About";
+}
+
+<h1>About @Model.AppName</h1>
+<p class="lead">@Model.Tagline</p>
+
+<h2 class="h4 mt-4">What you can do</h2>
+<ul>
+    @* "@foreach" switches to C#; the <li> inside switches back to HTML. *@
+    @foreach (var feature in Model.Features)
+    {
+        <li>@feature</li>
+    }
+</ul>
+
+<p class="text-muted small">Page generated at @Model.GeneratedAt.ToString("HH:mm:ss")</p>
+
+@* A Tag Helper: ASP.NET turns asp-controller/asp-action into href="/" for you. *@
+<a class="btn btn-primary" asp-controller="Home" asp-action="Index">Back to home</a>
