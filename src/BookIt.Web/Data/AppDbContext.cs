@@ -56,5 +56,8 @@ public class AppDbContext : DbContext
                 .HasForeignKey(a => a.ServiceId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+
+        // Demo business, services and working hours (see SeedData.cs).
+        SeedData.Apply(modelBuilder);
     }
 }
