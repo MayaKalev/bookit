@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookIt.Web.Data;
@@ -7,6 +8,9 @@ using BookIt.Web.Models.Entities;
 namespace BookIt.Web.Controllers;
 
 // Owner page: edit the weekly opening hours in one form.
+// Only logged-in users with the Owner role may use ANY action in this controller.
+// Not logged in → redirected to the login page. Logged in but not an owner → "Access denied".
+[Authorize(Roles = Roles.Owner)]
 public class WorkingHoursController : Controller
 {
     private readonly AppDbContext _db;

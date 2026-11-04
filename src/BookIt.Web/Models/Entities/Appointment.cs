@@ -22,10 +22,10 @@ public class Appointment
     public int ServiceId { get; set; }
     public Service Service { get; set; } = null!;
 
-    // The customer's user Id. ASP.NET Identity (step 1.8) uses string Ids,
-    // so we store a string now and connect it to the user table later.
+    // The customer who booked. Identity uses string Ids.
     [Required, MaxLength(450)]
     public string CustomerId { get; set; } = "";
+    public ApplicationUser Customer { get; set; } = null!;
 
     // Stored in UTC so times are unambiguous (see step 1.14).
     // EndUtc = StartUtc + service duration, saved so overlap checks are one simple query.

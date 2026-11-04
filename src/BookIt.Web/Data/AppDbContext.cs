@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using BookIt.Web.Models.Entities;
 
@@ -5,7 +6,8 @@ namespace BookIt.Web.Data;
 
 // The DbContext is your "session" with the database.
 // You query and save entities through it; EF Core translates that into SQL.
-public class AppDbContext : DbContext
+// IdentityDbContext adds the user/role tables (AspNetUsers, AspNetRoles, ...) to our own.
+public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
     // The options (which database, connection string) are passed in from Program.cs.
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
@@ -20,6 +22,8 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // base.OnModelCreating above configures the Identity tables — it must run first.
 
         // Two businesses can't share a URL slug.
         modelBuilder.Entity<Business>()
@@ -54,6 +58,12 @@ public class AppDbContext : DbContext
             appt.HasOne(a => a.Service)
                 .WithMany()
                 .HasForeignKey(a => a.ServiceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // CustomerId now really points to a user in AspNetUsers.
+            appt.HasOne(a => a.Customer)
+                .WithMany()
+                .HasForeignKey(a => a.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 

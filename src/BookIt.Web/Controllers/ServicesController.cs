@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookIt.Web.Data;
@@ -7,8 +8,10 @@ using BookIt.Web.Models.Entities;
 namespace BookIt.Web.Controllers;
 
 // Owner page: manage the business's services.
-// Stage 1 has a single business. In step 1.8 we lock this to logged-in owners,
-// and in Stage 2 the business comes from the logged-in owner instead of a constant.
+// Stage 1 has a single business. In Stage 2 the business comes from the logged-in owner instead of a constant.
+// Only logged-in users with the Owner role may use ANY action in this controller.
+// Not logged in → redirected to the login page. Logged in but not an owner → "Access denied".
+[Authorize(Roles = Roles.Owner)]
 public class ServicesController : Controller
 {
     private readonly AppDbContext _db;
