@@ -1,0 +1,24 @@
+@model ServiceFormViewModel
+@{
+    ViewData["Title"] = "Edit service";
+}
+
+<h1 class="h3 mb-3">Edit service</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            @* The Id travels with the form so the POST action knows which service to update. *@
+            <input type="hidden" asp-for="Id" />
+
+            <partial name="_ServiceForm" model="Model" />
+
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <a asp-action="Index" class="btn btn-link">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
