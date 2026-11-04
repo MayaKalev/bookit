@@ -1,0 +1,54 @@
+@model WeekHoursViewModel
+@{
+    ViewData["Title"] = "Working hours";
+}
+
+<h1 class="h3 mb-1">Working hours</h1>
+<p class="text-muted">Customers can only book inside these hours. Leave a day unchecked to close it.</p>
+
+<form asp-action="Index" method="post">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Open</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Break (optional)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @* A "for" loop (not foreach) on purpose: asp-for="Days[i].OpenTime" produces
+               name="Days[2].OpenTime", and model binding uses those indexes to rebuild the list on POST. *@
+            @for (var i = 0; i < Model.Days.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <strong>@Model.Days[i].DayOfWeek</strong>
+                        <input type="hidden" asp-for="Days[i].DayOfWeek" />
+                    </td>
+                    <td>
+                        <input asp-for="Days[i].IsOpen" class="form-check-input" />
+                    </td>
+                    <td>
+                        <input asp-for="Days[i].OpenTime" type="time" asp-format="{0:HH:mm}" class="form-control form-control-sm" />
+                    </td>
+                    <td>
+                        <input asp-for="Days[i].CloseTime" type="time" asp-format="{0:HH:mm}" class="form-control form-control-sm" />
+                        <span asp-validation-for="Days[i].CloseTime" class="text-danger small"></span>
+                    </td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            <input asp-for="Days[i].BreakStart" type="time" asp-format="{0:HH:mm}" class="form-control form-control-sm" />
+                            <input asp-for="Days[i].BreakEnd" type="time" asp-format="{0:HH:mm}" class="form-control form-control-sm" />
+                        </div>
+                        <span asp-validation-for="Days[i].BreakStart" class="text-danger small"></span>
+                        <span asp-validation-for="Days[i].BreakEnd" class="text-danger small"></span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Save hours</button>
+</form>
